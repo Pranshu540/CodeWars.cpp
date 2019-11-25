@@ -11,13 +11,12 @@ using namespace std;
 
 ///all global variables required for the program to work///
 
-char waste[1000];///used as a buffer
 char intro[10][100]={"---------------------------------------------------------------","CCCCCC OOOOOO DDDD   EEEEEE W     W     A     RRRRRRR SSSSSS   ","CC     O    O D   D  E      W     W    A A    R     R S        ","CC     O    O D    D EEEEEE W  W  W   AAAAA   RRRRRRR SSSSSS   ","CC     O    O D   D  E      W  W  W  A     A  R   R        S   ","CCCCCC OOOOOO DDDD   EEEEEE WWWWWWW A       A R     R SSSSSS   ","-------------------------------------------------------------- "};
 ///used for moving logo around the screen
 char space[100]=" ";///for moving logo left and right
 char tempspace[100]="";///to reduce length of space
 
-int k,i,r,j,u;///loop variables
+int k,i,r,j,u;///string loop variables
 
 char map[20][50]={
 "#################################################",
@@ -219,7 +218,7 @@ class StartUp///for the intro
     void fastdelay()///provides a quick delay
     {
         long int l;
-        for(l=0;l<=800000L;l++)
+        for(l=0;l<=100000L;l++)
         {
             ;
         }
@@ -228,7 +227,7 @@ class StartUp///for the intro
     void mediumdelay()///provides a mediocre length delay
     {
         long L;
-        for(L=0; L<=90000000L;L++)
+        for(L=0; L<=9000000L;L++)
         {
             ;
         }
@@ -237,7 +236,7 @@ class StartUp///for the intro
     void longdelay()///provides a long delay
     {
         long l;
-        for(l=0; l<=599999999L;l++)
+        for(l=0; l<=59999999L;l++)
         {
             ;
         }
@@ -286,7 +285,7 @@ class Outro///used for the outro
     void delaySlow()///for a long delay
     {
         long l;
-        for(l=0;l<=59999999L;l++)///60 million-1
+        for(l=0;l<=5999999L;l++)///60 million-1
         {
             ;
         }
@@ -459,7 +458,7 @@ class CodeStore
                 {
                     cout<<"You have made an unacceptable mistake however you shall be pardoned. You need to FOCUS. Enter anything to continue: "<<endl;
                 }
-                cin>>waste;
+                _getch();
                 break;
 
                 case 3:
@@ -474,11 +473,11 @@ class CodeStore
                     tempbombs=bombs;
                     codeCoin=codeCoin-(20*extrabombs);
                     cout<<"You have successfully purchased "<<extrabombs<<" extra bomb(s). Enter anything to continue: \n";
-                    cin>>waste;
+                    _getch();
                 }
                 else
                 {cout<<"You have made an unacceptable mistake however you shall be pardoned. You need to FOCUS. Enter anything to continue: "<<endl;
-                cin>>waste;}
+                _getch();}
                 break;
 
                 case 4:
@@ -493,11 +492,11 @@ class CodeStore
                     temphp=php;
                     codeCoin-=(100*healthpack);
                     cout<<"You have successfully purchased "<<healthpack<<" health pack(s). Enter anything to continue: \n";
-                    cin>>waste;
+                    _getch();
                 }
                 else
                 {cout<<"You have made an unacceptable mistake however you shall be pardoned. You need to FOCUS. Enter anything to continue: "<<endl;
-                cin>>waste;}
+                _getch();}
                 break;
 
                 case 5:
@@ -536,7 +535,7 @@ class CodeStore
                     pdmg=6;
                     codeCoin-=75;
                     cout<<"You have successfully purchased "<<blasterName<<". Enter anything to continue: \n";
-                    cin>>waste;
+                    _getch();
                 }
                 else
                 cout<<"You have made an unacceptable mistake however you shall be pardoned. You need to FOCUS "<<endl;
@@ -549,7 +548,7 @@ class CodeStore
                     pdmg=8;
                     codeCoin-=100;
                     cout<<"You have successfully purchased "<<blasterName<<". Enter anything to continue: \n";
-                    cin>>waste;
+                    _getch();
                 }
                 else
                 cout<<"You have made an unacceptable mistake however you shall be pardoned. You need to FOCUS "<<endl;
@@ -562,7 +561,7 @@ class CodeStore
                     pdmg=10;
                     codeCoin-=125;
                     cout<<"You have successfully purchased "<<blasterName<<". Enter anything to continue: \n";
-                    cin>>waste;
+                    _getch();
                 }
                 else
                 cout<<"You have made an unacceptable mistake however you shall be pardoned. You need to FOCUS "<<endl;
@@ -1623,9 +1622,7 @@ void playGame()
                 H.addScore(p);
                 p.playerNumber++;
             }
-            cin.sync();
-            cout<<"Enter anything to continue :)\n";
-            cin>>waste;
+            system("pause");
             break;
         }
         else if((php<=0 && chp>0)||ammo<0)
@@ -1634,9 +1631,8 @@ void playGame()
             score=0;
             p.playerScore=score;
             H.addScore(p);
-            cin.sync();
             cout<<"You Lost! Enter anything to continue :P\n";
-            cin>>waste;
+            _getch();
             break;
         }
         else if(php<=0 && chp<=0)
@@ -1646,7 +1642,7 @@ void playGame()
             p.playerScore=score;
             H.addScore(p);
             cout<<"Why you breaking my game? :( Enter anything to continue\n";
-            cin>>waste;
+            _getch();
             break;
         }
         delayLoop();
@@ -1693,6 +1689,8 @@ class MainMenu///for displaying the main menu
     void displayMenu()///provides intro and prints the main menu
     {
         int mainch;///stores choice of the user for the main menu
+        int hsch;///stores choice of the user for the high scores menu
+        char dch;///stores choice of the user for deleting scores
         system("cls");
         su.mainEntrance();
         su.mainPrint();
@@ -1722,8 +1720,8 @@ class MainMenu///for displaying the main menu
         cout<<"On playing and winning games, you get a score which automatically gets added to the high scores file.\n";
         cout<<"This score also converts to extra CodeCoins for you to spend!\n\n";
         cout<<"Enjoy yourself :-)\n\n";
-        cout<<"When you are done reading rules, type a character and press enter to continue. Do this for all future continues :-)\n";
-        cin>>waste;
+        cout<<"When you are done reading rules, type anything to continue. Do this for all future continues :-)\n";
+        _getch();
         hs.countScores();
         p.playerNumber=++numOfScores;
         do
@@ -1763,9 +1761,49 @@ class MainMenu///for displaying the main menu
                 break;
 
                 case 3:
-                hs.displayScores();
-                cout<<"\n\nEnter anything to continue:\n";
-                cin>>waste;
+                do
+                {
+                    system("cls");
+                    cout<<"\t\t\t\tHigh Scores Menu\n\n";
+                    cout<<"\t\t\t1.Display Scores\n";
+                    cout<<"\t\t\t2.Delete all Scores\n";
+                    cout<<"\t\t\t3.Return to Main Menu\n";
+                    cout<<"\t\t\tEnter your choice:\n";
+                    cin>>hsch;
+                    switch(hsch)
+                    {
+                        case 1:
+                        hs.displayScores();
+                        cout<<"\n\nEnter anything to continue:\n";
+                        _getch();
+                        break;
+
+                        case 2:
+                        cout<<"Are you sure you want to do this? Scores lost are irretrievable..\n";
+                        cout<<"Enter y if you'd like to delete, else file will not be deleted.\n";
+                        cin>>dch;
+                        if(dch=='y'||dch=='Y')
+                        {
+                            hs.deleteAllScores();
+                            cout<<"All scores have been deleted. Enter anything to continue:\n";
+                            _getch();
+                        }
+                        else
+                        {
+                            cout<<"Scores have not been deleted. Enter anything to continue:\n";
+                            _getch();
+                        }
+                        break;
+
+                        case 3:
+                        cout<<"Exiting...\n";
+                        break;
+
+                        default:
+                        cout<<"Invalid choice...Enter anything to continue:\n";
+                        _getch();
+                    }
+                }while(hsch!=3);
                 break;
 
                 case 4:
@@ -1774,7 +1812,7 @@ class MainMenu///for displaying the main menu
 
                 default:
                 cout<<"Invalid choice, please try again! Enter anything to continue: \n";
-                cin>>waste;
+                _getch();
             }
         }while(mainch!=4);
     }
@@ -1790,5 +1828,4 @@ int main()
     return 0;
 }
 
-///things to fix: whenever you type a character it shows up in the input of later cins... play the game and see for yourself. how to fix?
 
