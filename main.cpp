@@ -63,19 +63,21 @@ int score=0;///win a game, get a score! lose a game, get a 0 :P
 
 int codeCoin=100;///increased by winning games
 
+int victor=0;///by default is 0->lose. 1-> win
+
 float php=100.0;///100.0 by default, can be increased by purchasing health packs
 
-float temphp=100.0;///used for retaining php values
+int temphp=0;///stores health packs inputted by user
 
 int bombs=5;///5 by default, more can be purchased from the CodeStore
 
-int tempbombs=5;///used for retaining bombs values
+int tempbombs=0;///used for buying bombs from CodeStore
 
 int numOfScores=0;///used to assign player number and to count number of scores in the Scores file.
 
-int extrabombs;///stores the number of extra bombs bought from the CodeStore
+int extrabombs=0;///stores the total number of extra bombs bought from the CodeStore
 
-int healthpack;///stores the number of health packs (each is 20 hp) bought from CodeStore
+int healthpack=0;///stores the total number of health packs (each is 20 hp) bought from CodeStore
 
 char blasterName[50]="Default";///stores the name of CodeBlaster, is Default by default
 
@@ -218,7 +220,7 @@ class StartUp///for the intro
     void fastdelay()///provides a quick delay
     {
         long int l;
-        for(l=0;l<=100000L;l++)
+        for(l=0;l<=800000L;l++)
         {
             ;
         }
@@ -227,7 +229,7 @@ class StartUp///for the intro
     void mediumdelay()///provides a mediocre length delay
     {
         long L;
-        for(L=0; L<=9000000L;L++)
+        for(L=0; L<=90000000L;L++)
         {
             ;
         }
@@ -236,7 +238,7 @@ class StartUp///for the intro
     void longdelay()///provides a long delay
     {
         long l;
-        for(l=0; l<=59999999L;l++)
+        for(l=0; l<=599999999L;l++)
         {
             ;
         }
@@ -285,7 +287,7 @@ class Outro///used for the outro
     void delaySlow()///for a long delay
     {
         long l;
-        for(l=0;l<=5999999L;l++)///60 million-1
+        for(l=0;l<=59999999L;l++)///60 million-1
         {
             ;
         }
@@ -447,7 +449,7 @@ class CodeStore
                 }
                 else if(armor==0)
                 {
-                    cout<<"You're a daredevil, huh? Enter anything to continue: \n";
+                    cout<<"No armor? Enter anything to continue: \n";
                 }
                 else if(armor==1&&codeCoin>200)
                 {
@@ -466,13 +468,13 @@ class CodeStore
                 cout<<"You have "<<codeCoin<<"CodeCoins\n";
                 cout<<"One Bomb : 20 CodeCoins\n";
                 cout<<"Enter number of bombs you wish to purchase \n";
-                cin>>extrabombs;
-                if(codeCoin>=extrabombs*20)
+                cin>>tempbombs;
+                if(codeCoin>=tempbombs*20)
                 {
-                    bombs+=extrabombs;
-                    tempbombs=bombs;
-                    codeCoin=codeCoin-(20*extrabombs);
-                    cout<<"You have successfully purchased "<<extrabombs<<" extra bomb(s). Enter anything to continue: \n";
+                    extrabombs+=tempbombs;
+                    bombs=5+extrabombs;
+                    codeCoin=codeCoin-(20*tempbombs);
+                    cout<<"You have successfully purchased "<<tempbombs<<" extra bomb(s). Enter anything to continue: \n";
                     _getch();
                 }
                 else
@@ -485,13 +487,14 @@ class CodeStore
                 cout<<"You have "<<codeCoin<<"CodeCoins\n";
                 cout<<"One Health Pack (20 HP): 100 CodeCoins\n";
                 cout<<"Enter number of health packs you wish to purchase\n";
-                cin>>healthpack;
-                if(codeCoin>=healthpack*100)
+                cin>>temphp;
+                fflush(stdin);
+                if(codeCoin>=temphp*100)
                 {
-                    php=php+(20.0*healthpack);
-                    temphp=php;
-                    codeCoin-=(100*healthpack);
-                    cout<<"You have successfully purchased "<<healthpack<<" health pack(s). Enter anything to continue: \n";
+                    healthpack+=temphp;
+                    php=100.0+(20.0*healthpack);
+                    codeCoin-=(100*temphp);
+                    cout<<"You have successfully purchased "<<temphp<<" health pack(s). Enter anything to continue: \n";
                     _getch();
                 }
                 else
@@ -1062,29 +1065,11 @@ void computerMovement()
 
 void playGame()
 {
-    if(difficulty==1)
-    {
-        ammo=300;
-        cdmg=4.0;
-        chp=100.0;
-    }
-    else if(difficulty==2)
-    {
-        ammo=200;
-        cdmg=6.0;
-        chp=150.0;
-    }
-    else if(difficulty==3)
-    {
-        ammo=100;
-        cdmg=10.0;
-        chp=200.0;
-    }
     if(armor==1)
     {
         cdmg*=0.75;
     }
-    while(stopgame == false)
+    while(1)
     {
         system("cls");
         if(armor==2)
@@ -1559,93 +1544,121 @@ void playGame()
                 }
             }
         }
-        if(chp<=0 && php>0 && ammo>0)
+        if((chp<=0 && php>0) && (ammo>0))
         {
-            system("cls");
-            cout<<"Congratulations on winning!\n";
-            if(difficulty==1)
-            {
-                chp=100.0;
-                php=temphp;
-                score=(ammo*100)+1000;
-                ammo=300;
-                bombs=tempbombs;
-                cout<<"Your score is: "<<score<<endl;
-                codeCoin+=score/100;
-                cout<<"Your new CodeCoin balance is: "<<codeCoin<<" CodeCoins.\n";
-                p.playerScore=score;
-                H.addScore(p);
-                p.playerNumber++;
-            }
-            else if(difficulty==2)
-            {
-                chp=150.0;
-                php=temphp;
-                score=(ammo*400)+5000;
-                ammo=200;
-                bombs=tempbombs;
-                cout<<"Your score is: "<<score<<endl;
-                codeCoin+=score/100;
-                cout<<"Your new CodeCoin balance is: "<<codeCoin<<" CodeCoins.\n";
-                p.playerScore=score;
-                H.addScore(p);
-                p.playerNumber++;
-            }
-            else if(difficulty==3&&armor==2)///expert difficulty with poison armor
-            {
-                chp=200.0;
-                php=temphp;
-                cout<<"You are unimaginably good...You beat the game on its hardest difficulty with poison armor! You now get free armor :-)\n";
-                score=(ammo*10000)+50000;
-                ammo=100;
-                bombs=tempbombs;
-                armor=1;
-                cout<<"Your score is: "<<score<<endl;
-                codeCoin+=score/100;
-                cout<<"Your new CodeCoin balance is: "<<codeCoin<<" CodeCoins.\n";
-                p.playerScore=score;
-                H.addScore(p);
-                p.playerNumber++;
-            }
-            else if(difficulty==3)
-            {
-                chp=200.0;
-                php=temphp;
-                cout<<"Commendable job...You beat the game on its hardest difficulty!\n";
-                score=(ammo*1000)+60000;
-                ammo=100;
-                bombs=tempbombs;
-                cout<<"Your score is: "<<score<<endl;
-                codeCoin+=score/100;
-                cout<<"Your new CodeCoin balance is: "<<codeCoin<<" CodeCoins.\n";
-                p.playerScore=score;
-                H.addScore(p);
-                p.playerNumber++;
-            }
-            system("pause");
+            victor=1;
             break;
         }
-        else if((php<=0 && chp>0)||ammo<0)
+        else if((php<=0 && chp>0)||(ammo<=0))
         {
-            system("cls");
-            score=0;
-            p.playerScore=score;
-            H.addScore(p);
-            cout<<"You Lost! Enter anything to continue :P\n";
-            _getch();
+            victor=0;
             break;
         }
         else if(php<=0 && chp<=0)
         {
-            system("cls");
-            score=42069;
-            p.playerScore=score;
-            H.addScore(p);
-            cout<<"Why you breaking my game? :( Enter anything to continue\n";
-            _getch();
+            victor=2;
             break;
         }
         delayLoop();
+    }
+    if(victor==0)
+    {
+        system("cls");
+        score=0;
+        fflush(stdin);
+        p.playerScore=score;
+        H.addScore(p);
+        p.playerNumber++;
+        cout<<"You Lost!\n";
+        cout<<"Your score is: "<<score<<endl;
+        cout<<"Your new CodeCoin balance is: "<<codeCoin<<" CodeCoins.\n";
+        system("pause");
+    }
+    else if(victor==1)
+    {
+        system("cls");
+        cout<<"Congratulations on winning!\n";
+        if(difficulty==1)
+        {
+            score=(ammo*100)+1000;
+            cout<<"Your score is: "<<score<<endl;
+            codeCoin+=score/100;
+            cout<<"Your new CodeCoin balance is: "<<codeCoin<<" CodeCoins.\n";
+            p.playerScore=score;
+            H.addScore(p);
+            p.playerNumber++;
+        }
+        else if(difficulty==2)
+        {
+            score=(ammo*400)+5000;
+            cout<<"Your score is: "<<score<<endl;
+            codeCoin+=score/100;
+            cout<<"Your new CodeCoin balance is: "<<codeCoin<<" CodeCoins.\n";
+            p.playerScore=score;
+            H.addScore(p);
+            p.playerNumber++;
+        }
+        else if(difficulty==3&&armor==2)///expert difficulty with poison armor
+        {
+            cout<<"You are unimaginably good...You beat the game on its hardest difficulty with poison armor! You now get free armor :-)\n";
+            score=(ammo*10000)+50000;
+            armor=1;
+            cout<<"Your score is: "<<score<<endl;
+            codeCoin+=score/100;
+            cout<<"Your new CodeCoin balance is: "<<codeCoin<<" CodeCoins.\n";
+            p.playerScore=score;
+            H.addScore(p);
+            p.playerNumber++;
+        }
+        else if(difficulty==3)
+        {
+            cout<<"Commendable job...You beat the game on its hardest difficulty!\n";
+            score=(ammo*1000)+60000;
+            cout<<"Your score is: "<<score<<endl;
+            codeCoin+=score/100;
+            cout<<"Your new CodeCoin balance is: "<<codeCoin<<" CodeCoins.\n";
+            p.playerScore=score;
+            H.addScore(p);
+            p.playerNumber++;
+        }
+        system("pause");
+    }
+    else if(victor==2)
+    {
+        system("cls");
+        score=42069;
+        p.playerScore=score;
+        H.addScore(p);
+        cout<<"Why you breaking my game? :( Enter anything to continue\n";
+        _getch();
+    }
+}
+
+void resetGame()
+{
+    if(difficulty==1)
+    {
+        ammo=300;
+        php=100.0+(20.0*healthpack);
+        chp=100.0;
+        bombs=5+extrabombs;
+        cdmg=4.0;
+    }
+    else if(difficulty==2)
+    {
+        ammo=200;
+        php=100.0+(20.0*healthpack);
+        chp=150.0;
+        bombs=5+extrabombs;
+        cdmg=6.0;
+    }
+    else if(difficulty==3)
+    {
+        ammo=100;
+        php=100.0+(20.0*healthpack);
+        chp=200.0;
+        bombs=5+extrabombs;
+        cdmg=10.0;
     }
     for(y=0;y<20;y++)
     {
@@ -1671,7 +1684,6 @@ void playGame()
     }
     map[initcposy][initcposx]='O';
     map[initpposy][initpposx]='@';
-
 }
 };
 
@@ -1727,6 +1739,7 @@ class MainMenu///for displaying the main menu
         do
         {
             su.mainPrint();///has a system("cls") in it
+            fflush(stdin);
             cout<<"\n\n\n\n\n";
             cout<<"                                                 MAIN MENU                                                 \n";
             cout<<"                                            1. Hop Into A New Game                                         \n";
@@ -1750,6 +1763,8 @@ class MainMenu///for displaying the main menu
                 {
                     system("cls");
                     cs.storeMenu();
+                    fflush(stdin);
+                    g.resetGame();
                     g.playGame();
                 }
                 else
@@ -1768,14 +1783,16 @@ class MainMenu///for displaying the main menu
                     cout<<"\t\t\t1.Display Scores\n";
                     cout<<"\t\t\t2.Delete all Scores\n";
                     cout<<"\t\t\t3.Return to Main Menu\n";
-                    cout<<"\t\t\tEnter your choice:\n";
+                    cout<<"\t\t\tEnter your choice:\n\n";
                     cin>>hsch;
+                    fflush(stdin);
                     switch(hsch)
                     {
                         case 1:
                         hs.displayScores();
                         cout<<"\n\nEnter anything to continue:\n";
                         _getch();
+                        fflush(stdin);
                         break;
 
                         case 2:
@@ -1787,6 +1804,7 @@ class MainMenu///for displaying the main menu
                             hs.deleteAllScores();
                             cout<<"All scores have been deleted. Enter anything to continue:\n";
                             _getch();
+                            fflush(stdin);
                         }
                         else
                         {
@@ -1827,5 +1845,4 @@ int main()
     m.displayMenu();
     return 0;
 }
-
 
